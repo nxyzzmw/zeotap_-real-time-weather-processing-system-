@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Monitoring System</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #007acc;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        /* Unit Selection Form */
+        form#unitSelection {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        form#unitSelection label {
+            margin-right: 15px;
+            font-size: 1.1rem;
+        }
+
+        form#unitSelection input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        form#unitSelection button {
+            background-color: #007acc;
+            color: #fff;
+            padding: 10px 15px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button {
+            background-color: #007acc;
+            color: #fff;
+            padding: 10px 15px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        form#unitSelection button:hover {
+            background-color: #005fa3;
+        }
+
+        /* Refresh Button */
+       
+
+        .refresh-button:hover {
+            background-color: #218838;
+        }
+
+        /* Weather Summary Cards */
+        ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        ul li {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            font-size: 1rem;
+            color: #555;
+            transition: transform 0.2s;
+        }
+
+        ul li:hover {
+            transform: translateY(-5px);
+        }
+
+        ul li strong {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        /* View all link */
+        a {
+            margin-top: 20px;
+            background-color: #007acc;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        a:hover {
+            background-color: #005fa3;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            form#unitSelection {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Weather Monitoring System</h1>
+
+    <form id="unitSelection" action="/" method="GET">
+        <label>
+            <input type="radio" name="unit" value="Celsius" checked>Celsius
+        </label>
+        <label>
+            <input type="radio" name="unit" value="Fahrenheit">Fahrenheit
+        </label>
+        <label>
+            <input type="radio" name="unit" value="Kelvin">Kelvin
+        </label>
+        <button type="submit">Select Unit</button>
+    </form>
+
+    <!-- Refresh Button -->
+
+    <h2>Recent Weather Summaries</h2>
+    <div id="alertMsg">
+        If The Temperature Exceed 31.05 Degree It will send mail.
+    </div>
+    <ul>
+        <% if (summaries.length === 0) { %>
+            <li>No weather summaries available.</li>
+        <% } else { %>
+            <% summaries.forEach(summary => { %>
+                <li>
+                    <strong>City: <%= summary._id %></strong>
+                    Avg Temp: <%= summary.avgTemp.toFixed(2) %>°<%= summary.unit %><br>
+                    Max Temp: <%= summary.maxTemp.toFixed(2) %>°<%= summary.unit %><br>
+                    Min Temp: <%= summary.minTemp.toFixed(2) %>°<%= summary.unit %><br>
+                    Dominant Condition: <%= summary.dominantWeather %>
+                </li>
+            <% }) %>
+        <% } %>
+    </ul>
+    <div style="display: inline-block;">
+    <button><a href="/forecast">View Forecast</a></button>
+    <button class="refresh-button" onclick="window.location.reload();">Refresh Data</button>
+</div>
+
+    <script>
+  
+    // Get weather summaries from the backend
+    const summaries = <%- JSON.stringify(summaries) %>;
+
+    // Set the threshold (example: 32°C)
+    const tempThreshold = 31.05;
+
+    // Collect city names that exceed the temperature threshold
+    const exceededCities = summaries
+        .filter(summary => summary.maxTemp > tempThreshold)
+        .map(summary => summary._id); // Get the city names
+
+    // If any city exceeds the threshold, show the alert with their names
+    if (exceededCities.length > 0) {
+        alert(`Temperature threshold exceeded in the following cities: ${exceededCities.join(', ')}. Mail is sent to aishwarya.rajvedi@zeotap.com`);
+    }
+</script>
+
+</body>
+
+</html>

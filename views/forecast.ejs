@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4A90E2;
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            transition: background 0.3s;
+        }
+
+        li:hover {
+            background: #e7f3ff;
+        }
+
+        .forecast-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .forecast-item div {
+            flex: 1;
+        }
+
+        .forecast-item div:last-child {
+            text-align: right;
+        }
+
+        @media (max-width: 600px) {
+            .forecast-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .forecast-item div:last-child {
+                text-align: left;
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Weather Forecast</h1>
+
+    <% Object.keys(forecasts).forEach(city => { %>
+        <h2>Forecast for <%= city %></h2>
+        <ul>
+            <% forecasts[city].forEach(forecast => { %>
+                <li>
+                    <div class="forecast-item">
+                        <div>Date: <%= new Date(forecast.dt).toLocaleString() %></div>
+                        <div>Temperature: <%= (forecast.temp - 273.15).toFixed(2) %>°C</div>
+                        <div>Humidity: <%= forecast.humidity %>%</div>
+                        <div>Wind Speed: <%= forecast.wind_speed %> m/s</div>
+                        <div>Weather: <%= forecast.main %></div>
+                    </div>
+                </li>
+            <% }) %>
+        </ul>
+    <% }) %>
+</body>
+
+</html>
