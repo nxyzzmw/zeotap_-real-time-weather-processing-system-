@@ -35,7 +35,7 @@ const CITIES = ['Delhi', 'Mumbai', 'Chennai', 'Bangalore', 'Kolkata', 'Hyderabad
 
 // Alert thresholds
 const alertThresholds = {
-    temperature: 30,  // Temperature threshold
+    temperature: 25,  // Temperature threshold
 };
 
 // Email transporter (for email alerts)
